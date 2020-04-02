@@ -98,7 +98,7 @@ class RentalCarController {
                 if (car) {
                     res.status(200).json("Success Delete Car")
                 } else {
-                    throw { status: 404, message: "Car Not Found" }
+                    throw { status: 404, message: "Rental Car Not Found" }
                 }
             }).catch(next);
     }

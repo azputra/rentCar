@@ -151,25 +151,6 @@ export default new Vuex.Store({
         }).catch(({ response }) => {
           Swal.fire('Error!', response.data, 'error');
         });
-    },
-    removeCart(context, payload) {
-      axios({
-        url: `${baseUrl}/rentalCars/${payload}`,
-        method: 'DELETE',
-      })
-        .then(() => {
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Success Remove Car From Your Cart',
-            showConfirmButton: false,
-            timer: 1500
-          })
-          context.dispatch('findAllCart')
-        })
-        .catch(({ response }) => {
-          Swal.fire('Error!', response.data.message, 'error');
-        })
     }
   },
   modules: {

@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
           })
             .then((result) => {
               if (result) {
-                throw new Error("license plate already exist")
+                throw new Error("lisence plate already exist")
               }
             })
         }

@@ -84,7 +84,7 @@
             Discount :
             <b
               style="color:red"
-            >Rp. {{(myTotalPrice*(discount/100)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}}</b>
+            >Rp. {{(Math.floor(myTotalPrice*(discount/100))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}}</b>
           </div>
           <div style="margin: 5px; margin-left: 35%;" v-if="discount !== 'No Discount'">
             Total price :
@@ -94,9 +94,6 @@
             Total price :
             <b>Rp.{{(myTotalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}}</b>
           </div>
-        </div>
-        <div class="pull-right" style="margin: 10px">
-          <button class="btn-checkout">Checkout</button>
         </div>
       </div>
     </div>
@@ -148,7 +145,7 @@ export default {
       const carts = this.$store.state.carts;
       if (carts.length >= 2) {
         this.discount = 10;
-      } else {
+      } else if (carts.length) {
         carts.forEach(rent => {
           if (rent.Car.carYear < 2010) {
             this.discount = 7;
@@ -158,10 +155,29 @@ export default {
             this.discount = "No Discount";
           }
         });
+      } else {
+        this.discount = "No Discount";
       }
     },
     removeRentCar(id) {
-      this.$store.dispatch("removeCart", id);
+      axios({
+        url: `http://localhost:3000/rentalCars/${id}`,
+        method: "DELETE"
+      })
+        .then(() => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Success Remove Car From Your Cart",
+            showConfirmButton: false,
+            timer: 1500
+          });
+          this.$store.dispatch("findAllCart");
+          this.findAllMyCart();
+        })
+        .catch(({ response }) => {
+          Swal.fire("Error!", response.data.message, "error");
+        });
     },
     plus(id, day) {
       axios({
